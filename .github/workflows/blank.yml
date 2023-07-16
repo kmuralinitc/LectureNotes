@@ -14,5 +14,5 @@ jobs:
       - name: Upload PDF file
         uses: actions/upload-artifact@v3
         with:
-          name: PDF
+          name: LogicForCS/PDF
           path: LogicForCS/main.pdf
