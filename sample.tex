@@ -1,0 +1,272 @@
+\documentclass[a4paper,11pt]{article}
+%\usepackage[utf8x]{inputenc}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+%\usepackage{algorithmic}
+%\usepackage{algorithm}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=3cm]{geometry}
+\usepackage{epsfig}          %allows figures to be inserted in .eps format
+\usepackage{subfig}			 %allows subfigures to be inserted in the main figure
+\setlength{\oddsidemargin}{.25in}
+\setlength{\evensidemargin}{.25in}
+\setlength{\textwidth}{6in}
+\setlength{\topmargin}{-0.4in}
+\setlength{\textheight}{8.5in}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\notes}[3]{
+	\renewcommand{\thepage}{#1 - \arabic{page}}
+	\noindent
+	\begin{center}
+	\framebox{
+		\vbox{
+		\hbox to 5.78in { { \hfill \bf Department of Computer Science and Engineering, NIT Calicut \hfill}
+		}
+		\vspace{4mm}
+		\hbox to 5.78in { {\Large \hfill #3 \hfill} }
+		\vspace{2mm}
+		\hbox to 5.78in { {\hfill \it #2 } }
+		}
+	}
+	\end{center}
+	\vspace*{4mm}
+}
+
+\newcommand{\ho}[3]{\notes{#1}{Prepared by: #2}{Lecture #1: #3}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{cor}{Corollary}
+\newtheorem{obs}{Observation}
+\newtheorem{claim}{Claim}
+\newtheorem{propos}{Proposition}
+\newtheorem{exercise}{Exercise}
+\newtheorem{example}{Example}  
+\newtheorem{problem}{Problem}
+%begins a LaTeX document
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%insert the date
+%insert your name
+%insert the lecture title in place of the placeholders
+\ho{1}{K. Murali Krishnan}{Propositional Calculus }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+In this lecture, we will study the logic of propositions.  A proposition is a statement
+which takes value {\em true} or {\em false}.  We will use propositional variables like
+$p,q,r$ to denote propositions.  Propositional formulas are constructed from variables
+using the {\em logical connectives} $\wedge, \vee, \rightarrow$ and $\neg$.  Once 
+the {\em truth values} of the variables of a formula are known, the truth value of the 
+formula can be evaluated.  These notions are formalized below.  
+
+\subsection*{Syntax of Propositional Calculus}
+Let $V$ be a collection of propositional variables. The set of Boolean (or propositional) 
+formulas over $V$ denoted by $\mathcal{F}_{V}$ are inductively defined as follows:
+\begin{itemize}
+ \item if $\phi \in V$ then $\phi \in \mathcal{F}_V$.
+ \item if $\phi, \psi \in V$, then $(\phi \wedge \psi)$, $(\phi \vee \psi)$, 
+$(\phi \rightarrow \psi)$, $(\phi \leftrightarrow \psi)$,
+$(\neg \phi)$, $(\neg \psi)$ are in $\mathcal{F}_V$.  
+\end{itemize}
+
+\begin{example}
+ If $V=\{p,q,r\}$ the $(p\wedge (q\rightarrow r))$, $(\neg q\rightarrow (p\vee q))$ etc.
+are formulas.
+\end{example}
+
+The normal convention is that $\neg$ has the highest precedence among 
+the connectors.  $\wedge$ has higher precedence over $\vee$, which in turn has higher precedence over 
+$\rightarrow$ and $\leftrightarrow$.  
+$\wedge$ and $\vee$ are left associative, whereas, $\neg$, $\leftrightarrow$ and $\rightarrow$ 
+are right associative.
+This allows parenthesis to be omitted.  For instance $p\vee q\rightarrow \neg r\wedge p$ denotes
+$(p\vee q)\rightarrow ((\neg r)\wedge p)$.  
+
+Formulas must be given ``life'' by assigning truth values.  This is our next objective.  We will
+use $1$ and $0$ instead of {\em true} and {\em false}.  
+
+\subsection*{Semantics of Propositional Calculus}
+
+Given a variable set $V$.  A {\em Truth assignment} for $V$ is a map $\tau :V\longrightarrow \{0,1\}$
+We can extend $\tau$ inductively into a function from $\mathcal{F}_V$ to $\{0,1\}$ (with a 
+little abuse of notation) as follows:
+\begin{itemize}
+ \item $\tau(\phi)$ is already defined if $\phi \in V$.
+ \item $\tau(\phi\wedge \psi)=1$ if both $\tau(\phi)=1$ and $\tau(\psi)=1$, $0$ otherwise.  
+ \item $\tau(\phi\vee \psi)=1$ if $\tau(\phi)=1$ or $\tau(\psi)=1$, $0$ otherwise
+ \item $\tau(\phi\rightarrow \psi)=0$ if $\tau(\phi)=1$ or $\tau(\psi)=0$, $1$ otherwise
+ \item $\tau(\phi\leftrightarrow \psi)=1$ if $\tau(\phi)=\tau(\psi)$, $0$ otherwise
+ \item $\tau(\neg \phi)=1$ if $\tau(\phi)=0$, $1$ otherwise.
+\end{itemize}
+
+\begin{example}
+Let $V=\{p,q,r\}$.  Let $\tau(p)=\tau(q)=1$ and $\tau(r)=0$. Then $\tau(q\rightarrow r)=0$,
+$\tau(p\wedge (q\rightarrow r))=0$ $\tau(p\leftrightarrow q)=1$ etc.
+\end{example}
+
+For the rest of this lecture, we assume that a variable set $V$ is given.  The set of all truth assignments
+from $V$ to $\{0,1\}$ will be denoted by $\mathcal{T}_V$.  For $\phi \in \mathcal{F}_V$, we say $\tau\in \mathcal{T}_{V}$ {\bf satisfies} $\phi$ if 
+$\tau(\phi)=1$. The notation $\tau \models \phi$ will be used instead of  $\tau(\phi)=1$.  
+Define  $\mathcal{M}(\phi)=\{\tau \in \mathcal{T}_{V}:  \tau\models \phi \}$. The set $\mathcal{M}(\phi)$, called the set of all {\bf models} of $\phi$, is the 
+collection of all truth assignments that satisfy $\phi$.  
+Let $\phi, \psi\in \mathcal{F}_{V}$. $\psi$ is said to be a {\bf logical consequence} of $\phi$ if every
+$\tau\in \mathcal{M}(\phi)$ satisfies $\tau \models \psi$.  That is, whenever a truth assignment makes
+$\phi$ true, it should make $\psi$ also true.  In such case we write $\phi\Rightarrow\psi$.  
+$\psi \in \mathcal{F}_V$ is said to be {\bf logically equivalent} to 
+$\phi \in \mathcal{F}_V$ if $\mathcal{M}(\phi)=\mathcal{M}(\psi)$.  That
+is, $\phi$ and $\psi$ are equivalent if every truth assignment in $\mathcal{T}_V$ gives the same truth value to both $\psi$ and $\phi$.
+In this case, we write $\phi \Leftrightarrow \psi$.
+A formula $\phi \in \mathcal{F}_V$ is said to be {\bf satisfiable} if $\mathcal{M}(\phi)\neq \emptyset$.  That is, if there is a truth assignment to 
+the variables that makes the formula evaluate to true. $\phi$ is said to be {\bf unsatisfiable} otherwise.  
+$\phi \in \mathcal{F}_V$ is a {\bf tautology} 
+if $\mathcal{M}(\phi)=\mathcal{T}_{V}$.  That is,
+$\tau(\phi)=1$ for all truth assignments $\tau\in \mathcal{T}_{V}$.  
+$\phi$ is {\bf contradictory} if $\mathcal{M}(\phi)=\emptyset$.  
+That is, $\phi$ evaluates to false under any truth assignment.  Note that $\phi$ is a tautology 
+if and only if $\neg \phi$ is contradictory. 
+
+\begin{example}
+ Let $V=\{p,q\}$.  The formula $\phi=(p\rightarrow q)\rightarrow q$ is satisfiable as $\mathcal{M}(\phi)=\{01,10,11\}\neq \emptyset$. 
+ The formula is not a tautology.  Let $\psi=p\vee q$.  Then, clearly $\phi\Leftrightarrow \psi$.  
+\end{example}
+
+Next we extend these notions to collections of formulas.   Let $\mathcal{A}\subseteq \mathcal{F}_V$.  Define
+$\mathcal{M}(\mathcal{A})=\bigcap_{\phi \in \mathcal{A}}\mathcal{M}(\phi)$.  Thus models of $\mathcal{A}$ are precisely
+those truth assignments that satisfy every formula in $\mathcal{A}$. For each $\tau \in \mathcal{M}(\mathcal{A})$, we
+write $\tau \models \mathcal{A}$.  We set $\mathcal{M}({\emptyset})=\mathcal{T}_V$. 
+$\mathcal{A}$ is  {\bf satisfiable} or {\bf consistent}
+if $\mathcal{M(A)}\neq \emptyset$. $\mathcal{A}$ is said to be {\bf inconsistent} if $\mathcal{A}$ is not consistent. 
+ 
+
+%\begin{example}
+% Let $V=\{p,q,r\}$.  The set $\mathcal{A}=\{p,p\rightarrow q, q\rightarrow  r\}$ is categorical because $(p,q,r)=(1,1,1)$ is the unique
+% satisfying truth assignment.  The set $\mathcal{A}=\{p,p\rightarrow q, q\rightarrow  r, \neg r\}$ is inconsistent, and hence categorical as well. 
+%\end{example}
+
+\begin{definition}
+Let $\mathcal{A}\subseteq \mathcal{F}_V$.  
+\begin{itemize}
+
+\item $\mathcal{A}\subseteq \mathcal{F}_V$ is said to be {\bf categorical} 
+(or sometimes called {\bf complete}) if $|\mathcal{M(A)}|\leq 1$.  That is, either $\mathcal{A}$ is 
+inconsistent or there is a unique $\tau\in \mathcal{T}_V$ such that $\tau\models \mathcal{A}$.
+
+\item $\phi \in \mathcal{F}_V$ is said to be {\bf independent} of $\mathcal{A}$
+if both $\mathcal{A}\cup \{\phi\}$ and $\mathcal{A}\cup \{\neg \phi\}$ are consistent.  That is, there
+exists truth assignments $\tau_1, \tau_2 \in \mathcal{M(A)}$ such that 
+$\tau_1\models \phi$ and $\tau_2\models \neg \phi$.  
+
+\item $\phi \in \mathcal{F}_V$ is said to be a {\bf logical consequence} of 
+$\mathcal{A}\subseteq \mathcal{F}_V$ if every $\tau\in \mathcal{M(A)}$ satisfies $\tau\models \psi$.  
+In this case we write $\mathcal{A}\models\psi$.  
+
+\item $\mathcal{A,A'}\subseteq \mathcal{F}_V$ are said to be {\bf logically equivalent} if 
+$\mathcal{M(A)}=\mathcal{M(A')}$.  That is, the set of truth assignments (models) that satisfy
+all formulas in $\mathcal{A}$ and $\mathcal{A'}$ are exactly the same.  
+
+\end{itemize}
+\end{definition}
+
+
+
+
+Note that the sets $\mathcal{A}$ and $\mathcal{A'}$ in these definitions could contain infinitely
+many formulas from $\mathcal{F}$.  
+
+\begin{example}
+Let $V=\{p,q,r\}$ and $\mathcal{A}=\{p\rightarrow q, q\rightarrow r, \neg r\vee \neg q\, q\vee r\}$.
+The set $\mathcal{A}$ is consistent as $\tau(p)=\tau(q)=0, \tau(r)=1$ satisfies $\mathcal{A}$.  
+The set is categorical as no other truth assignment satisfies the set.  $\neg p$, is an example
+of a logical consequence of $\mathcal{A}$.  Since the set is categorical, there is no formula 
+in $\mathcal{F}_V$ that is independent of $\mathcal{A}$ (why?).  
+\end{example}
+
+\begin{example}
+ The set $\mathcal{A}=\{p_1\vee p_2, p_2\vee p_3,p_3\vee p_4,...\}$ over $V=\{p_1,p_2,...\}$
+is consistent. $\tau(p_i)=1$ for all $i$ satisfies $\mathcal{A}$.  
+$\mathcal{A}$ is not categorical (why?).  $\neg p_2\rightarrow (p_1\vee p_3)$ is a logical
+consequence of $\mathcal{A}$ (why?).  For each $i$, 
+the formula $p_i\in \mathcal{F}_V$ is independent of $\mathcal{A}$ (why?).
+\end{example}
+
+\begin{exercise}
+Show that if $\mathcal{A}\subseteq \mathcal{F}_V$ is categorical, then for 
+every $\phi \in \mathcal{F}_V$ either 
+$\mathcal{A}\cup \{\phi\}$ is inconsistent or $\mathcal{A}\cup \{\neg\phi\}$ is 
+inconsistent. Hence there is no $\phi \in \mathcal{F}_V$ that is 
+independent of a complete set $\mathcal{A}\subseteq \mathcal{F}_V$.  Conversely, if there exists
+$\phi\in \mathcal{F}_{V}$ independent of $\mathcal{A}$, then show that $\mathcal{A}$ is not categorical. 
+\end{exercise}
+
+\begin{exercise}
+Let $V=\{p,q,r\}$  Give an example for a consistent and complete set 
+$\mathcal{A}\subseteq \mathcal{F}_V$ and formula $\phi \in \mathcal{F}_V$ 
+such that both  $\mathcal{A}\cup \{\phi\}$ and $\mathcal{A}\cup \{\neg\phi\}$ 
+are inconsistent.  
+\end{exercise}
+
+\begin{exercise}
+Let $\mathcal{A}=\emptyset$.  Then a formula $\phi \in \mathcal{F}_V$ is independent of $\mathcal{A}$ 
+if and only if neither $\phi$ nor $\neg \phi$ are tautologies.  
+\end{exercise}
+
+
+
+\begin{definition}
+Let $\phi,\psi \in \mathcal{F}_V$. 
+\begin{itemize}
+ \item $\phi$ {\bf tautologically implies} $\psi$ if the formula $\phi\rightarrow\psi$ is
+a tautology.  In this case, we write $\phi \Rightarrow \psi$.  
+ \item $\phi$ is {\bf tautologically equivalent} to $\psi$ if $\phi\leftrightarrow \psi$ is
+a tautology.  In this case we write $\phi \Leftrightarrow \psi$.  
+\end{itemize}
+\end{definition} 
+
+
+\begin{exercise}
+Show that a $\psi$ is a logical consequence of $\phi$ if and only if $\phi$ tautologically
+implies $\psi$.    
+\end{exercise}
+
+\begin{exercise}
+Show that a $\psi$ is logically equivalent to $\phi$ if and only if $\phi\leftrightarrow \psi$ 
+is a tautology (that is $\phi$ is tautologically equivalent to $\psi$).  
+\end{exercise}
+
+The notions of tautological implication and logical consequence mean exactly the same
+concept in view of the exercises above.  This notion has central importance in {\em deductions}
+which we will see as we proceed further through these notes.  
+
+The next definition states that a set of formulas form an independent set if there are no {\em redundant}
+formulas in the set in the sense none of the formulas in the set is a logical consequence of the others.  
+
+\begin{definition}
+ A set $\mathcal{A}\subseteq \mathcal{F}_V$ is said to be an {\bf independent set of formulas} if 
+ for each $\phi \in \mathcal{A}$, $\phi$ is independent of $A-\{\phi\}$.  
+\end{definition}
+
+\begin{example}
+ The set $\mathcal{A}=\{p,p\rightarrow q, q\rightarrow r, r\}$ over $V=\{p,q,r\}$ is {\bf not} an independent set because $r$ is a logical
+ consequence of the remaining formulas.  
+\end{example}
+
+
+\begin{exercise}
+Let $V=\{p,q,r\}$.  In each case determine whether the given axiom set $\mathcal{A}$ is consistent or complete.
+Whenever $\mathcal{A}$ is incomplete, find a formula $\phi\in \mathcal{F}_{V}$ that is independent of $\mathcal{A}$.  
+\begin{enumerate}
+ \item $\mathcal{A}=\{p\rightarrow (q\rightarrow r), \neg q, p\}$.  
+ \item $\mathcal{A}=\{p\rightarrow q, q\rightarrow r, r\rightarrow q, \neg q \}$
+ \item $\mathcal{A}=\{p\vee q, q\wedge r, \neg r\}$.  
+\end{enumerate}
+\end{exercise}
+
+
+
+%ends document
+\end{document}
